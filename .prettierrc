@@ -1,5 +1,12 @@
 {
+    "parser": "typescript",
+    "plugins": ["prettier-plugin-typescript"],
     "printWidth": 400,
     "singleQuote": true,
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "rules": {
+        "builder-linebreak-between-statements": true,
+        "builder-linebreak-after-arguments": true,
+        "builder-linebreak-after-return": true
+    }
 }
