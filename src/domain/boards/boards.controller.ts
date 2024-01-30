@@ -1,12 +1,13 @@
-import { Controller, ParseIntPipe, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, ParseIntPipe, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 
-import { BoardStatus } from './entity/BoardStatus';
-import { CreateBoardDTO } from './dto/CreateBoardDTO';
+import { BoardStatus } from './utils/BoardEnums';
+import { CreateBoardRequest } from './dto/CreateBoardDTOs';
 import { Board } from './entity/Board';
 import { BoardStatusPipe } from './pipes/BoardStatus.pipe';
 
 import { BoardsService } from './boards.service';
+import { AuthGuard } from '@nestjs/passport';
 
 /**
  * nest g controller boards --no-spec
@@ -36,9 +37,10 @@ export class BoardsController {
     }
 
     @Post()
+    @UseGuards(AuthGuard())
     @UsePipes(ValidationPipe) // 핸들러 레벨에서 Pipe를 사용하는 방법
-    async createBoard(@Body() createBoardDTO: CreateBoardDTO): Promise<Board> {
-        return await this.boardsService.create(createBoardDTO);
+    async createBoard(@Body() createBoardRequest: CreateBoardRequest): Promise<Board> {
+        return await this.boardsService.create(createBoardRequest);
     }
 
     @Get(':id')

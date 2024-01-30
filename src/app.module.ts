@@ -7,6 +7,10 @@ import { BoardsModule } from './domain/boards/boards.module';
 import { AppController } from './app.controller';
 import { AuthModule } from './domain/auth/auth.module';
 import { UsersModule } from './domain/users/users.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './domain/auth/strategy/JwtStrategy';
+import { User } from './domain/users/entity/User';
 
 /**
  * @nestjs/typeorm
@@ -16,8 +20,13 @@ import { UsersModule } from './domain/users/users.module';
  * postgres와 typeorm을 사용하기 위해서는 위 패키지 3가지를 설치해야한다.
  */
 @Module({
-    imports: [TypeOrmModule.forRoot(typeOrmConfig), BoardsModule, AuthModule, UsersModule],
+    imports: [
+        TypeOrmModule.forRoot(typeOrmConfig),
+        BoardsModule,
+        AuthModule,
+        UsersModule
+    ],
     controllers: [AppController],
-    providers: [],
+    providers: []
 })
 export class AppModule {}

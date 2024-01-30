@@ -2,8 +2,9 @@ import { ConflictException, Injectable, InternalServerErrorException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entity/User';
 import { Repository } from 'typeorm';
-import { SignupDTO } from './dto/SignupDTO';
+import { SignupRequest } from './dto/SignupDTOs';
 import { Builder } from 'builder-pattern';
+import * as bcrypt from 'bcryptjs'
 
 @Injectable()
 export class UsersService {
@@ -12,12 +13,14 @@ export class UsersService {
         private usersRepository: Repository<User>
     ) {}
 
-    async create(signupDTO: SignupDTO): Promise<User> {
-        const { username, password } = signupDTO;
+    async create(signupRequest: SignupRequest): Promise<User> {
+        const { username, password } = signupRequest;
+        const salt = await bcrypt.genSalt();
+        const hashedPasssword = await bcrypt.hash(password, salt);
 
         const user = Builder<User>()
             .username(username)
-            .password(password)
+            .password(hashedPasssword)
             .build();
 
         let saved: User;

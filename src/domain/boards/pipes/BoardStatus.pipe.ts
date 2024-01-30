@@ -4,7 +4,7 @@
     BadRequestException,
 } from '@nestjs/common';
 
-import { BoardStatus } from '../entity/BoardStatus';
+import { BoardStatus } from '../utils/BoardEnums';
 
 /**
  * Pipe

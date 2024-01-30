@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 
-import { CreateBoardDTO } from './dto/CreateBoardDTO';
-import { BoardStatus } from './entity/BoardStatus';
+import { CreateBoardRequest } from './dto/CreateBoardDTOs';
+import { BoardStatus } from './utils/BoardEnums';
 import { Board } from './entity/Board';
 
 import { InjectRepository } from '@nestjs/typeorm';
@@ -42,8 +42,8 @@ export class BoardsService {
     //     .where('Board.id = :id', { id: 1 }).getMany();
     // }
 
-    async create(createBoardDTO: CreateBoardDTO): Promise<Board> {
-        const { title, description } = createBoardDTO;
+    async create(createBoardRequest: CreateBoardRequest): Promise<Board> {
+        const { title, description } = createBoardRequest;
 
         const board: Board = Builder<Board>()
             .title(title)
