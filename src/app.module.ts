@@ -7,10 +7,6 @@ import { BoardsModule } from './domain/boards/boards.module';
 import { AppController } from './app.controller';
 import { AuthModule } from './domain/auth/auth.module';
 import { UsersModule } from './domain/users/users.module';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './domain/auth/strategy/JwtStrategy';
-import { User } from './domain/users/entity/User';
 
 /**
  * @nestjs/typeorm

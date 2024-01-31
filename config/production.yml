@@ -1,0 +1,8 @@
+db:
+    host: 'localhost'
+    username: 'dc-choi'
+    password: ''
+    synchronize: false
+
+token:
+    secret: 'Q!W@E#R$T%Y^'

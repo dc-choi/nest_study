@@ -1,4 +1,4 @@
-import { Controller, ParseIntPipe, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Logger, ParseIntPipe, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 
 import { BoardStatus } from './utils/BoardEnums';
@@ -8,6 +8,8 @@ import { BoardStatusPipe } from './pipes/BoardStatus.pipe';
 
 import { BoardsService } from './boards.service';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../users/utils/UserDecorator';
+import { User } from '../users/entity/User';
 
 /**
  * nest g controller boards --no-spec
@@ -32,15 +34,20 @@ export class BoardsController {
     constructor(private boardsService: BoardsService) {}
 
     @Get()
-    async list(): Promise<Board[]> {
-        return await this.boardsService.list();
+    @UseGuards(AuthGuard())
+    async list(@GetUser() user: User): Promise<Board[]> {
+        Logger.debug(`BoardsController: User {${user.username}} is get list`);
+        return await this.boardsService.list(user);
     }
 
     @Post()
     @UseGuards(AuthGuard())
     @UsePipes(ValidationPipe) // 핸들러 레벨에서 Pipe를 사용하는 방법
-    async createBoard(@Body() createBoardRequest: CreateBoardRequest): Promise<Board> {
-        return await this.boardsService.create(createBoardRequest);
+    async create(
+        @Body() createBoardRequest: CreateBoardRequest,
+        @GetUser() user: User,
+    ): Promise<Board> {
+        return await this.boardsService.create(createBoardRequest, user);
     }
 
     @Get(':id')
@@ -49,12 +56,16 @@ export class BoardsController {
     }
 
     @Delete(':id')
-    async deleteBoard(@Param('id', ParseIntPipe) id: number): Promise<Board> { // 매개변수 레벨에서 Pipe를 사용하는 방법
-        return await this.boardsService.deleteBoard(id);
+    @UseGuards(AuthGuard())
+    async delete(
+        @Param('id', ParseIntPipe) id: number,
+        @GetUser() user: User
+    ): Promise<Board> { // 매개변수 레벨에서 Pipe를 사용하는 방법
+        return await this.boardsService.delete(id, user);
     }
 
     @Put(':id/status')
-    updateBoardStatus(
+    updateStatus(
         @Param('id', ParseIntPipe) id: number,
         @Body('status', BoardStatusPipe) status: BoardStatus
     ): Promise<Board> {

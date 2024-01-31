@@ -9,6 +9,7 @@ import { Board } from './entity/Board';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Builder } from 'builder-pattern';
+import { User } from '../users/entity/User';
 
 /**
  * provider
@@ -29,26 +30,33 @@ export class BoardsService {
         private boardsRepository: Repository<Board>
     ) {}
 
-    async list(): Promise<Board[]> {
-        // const queryRunner = this.boardsRepository.queryRunner;
-        // await queryRunner.startTransaction();
-        return await this.boardsRepository.find();
+    async list(user: User): Promise<Board[]> {
+        // return await this.boardsRepository.find();
+        return await this.boardsRepository
+            .createQueryBuilder()
+            .select([
+                'board.id',
+                'board.title',
+                'board.description',
+                'board.status',
+            ])
+            .from(Board, 'board')
+            .where('board.userId = :id', { id: user.id })
+            .getMany();
     }
 
-    // 쿼리빌더를 사용해서 값을 가져옴.
-    // async getBoards(): Promise<Board[]> {
-    //     return await this.boardRepository
-    //     .createQueryBuilder()
-    //     .where('Board.id = :id', { id: 1 }).getMany();
-    // }
-
-    async create(createBoardRequest: CreateBoardRequest): Promise<Board> {
+    async create(createBoardRequest: CreateBoardRequest, user: User): Promise<Board> {
+        // const queryRunner = this.boardsRepository.queryRunner;
+        // await queryRunner.startTransaction();
+        // await queryRunner.commitTransaction();
+        // await queryRunner.rollbackTransaction();
         const { title, description } = createBoardRequest;
 
         const board: Board = Builder<Board>()
             .title(title)
             .description(description)
             .status(BoardStatus.PUBLIC)
+            .user(user)
             .build();
 
         return await this.boardsRepository.save(board);
@@ -62,10 +70,15 @@ export class BoardsService {
         return saved;
     }
 
-    async deleteBoard(id: number): Promise<Board> {
+    async delete(id: number, user: User): Promise<Board> {
         const saved = await this.get(id);
 
-        this.boardsRepository.delete(id);
+        await this.boardsRepository.delete({
+            id,
+            user: {
+                id: user.id
+            }
+        });
 
         return saved;
     }
