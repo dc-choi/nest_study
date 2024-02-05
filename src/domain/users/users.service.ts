@@ -26,7 +26,8 @@ export class UsersService {
         let saved: User;
         try {
             saved = await this.usersRepository.save(user);
-        } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
             if (error.code === '23505') {
                 throw new ConflictException('user is already signup')
             } else {
