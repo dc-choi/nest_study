@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["node", "@types/config"],
     "module": "commonjs",
     "esModuleInterop": true,
     "strict": true,

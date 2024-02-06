@@ -1,9 +1,10 @@
 ﻿import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Board } from '../../domain/boards/entity/Board';
 import { User } from '../../domain/users/entity/User';
-import * as config from 'config';
+import config from 'config';
 
-const { type, host, port, username, password, database, synchronize } = config.get('db');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { type, host, port, username, password, database, synchronize }: any = config.get('db');
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
     type,

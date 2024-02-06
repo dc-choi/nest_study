@@ -1,7 +1,7 @@
 db:
     host: 'localhost'
-    username: 'dc-choi'
-    password: ''
+    username: 'dcchoi'
+    password: 'dcchoi'
     synchronize: true
 
 token:

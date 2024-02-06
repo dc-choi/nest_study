@@ -5,9 +5,10 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { LoginResponse } from "src/domain/auth/dto/LoginDTOs";
 import { User } from "src/domain/users/entity/User";
 import { Repository } from "typeorm";
-import * as config from 'config';
+import config from 'config';
 
-const { secret } = config.get('token');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { secret }: any = config.get('token');
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

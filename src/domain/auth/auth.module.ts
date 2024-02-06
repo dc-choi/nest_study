@@ -6,9 +6,10 @@ import { User } from '../users/entity/User';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategy/JwtStrategy';
-import * as config from 'config';
+import config from 'config';
 
-const { secret, expire } = config.get('token');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const { secret, expire }: any = config.get('token');
 
 @Module({
     imports: [

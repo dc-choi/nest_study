@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
-import * as config from 'config';
+import config from 'config';
 
 /**
  * Nest.js 라이프사이클
@@ -31,9 +31,9 @@ import * as config from 'config';
  * 특정 오류 처리기를 사용할 경로와 각 경로 주변의 복장성을 관리
  */
 async function bootstrap() {
-    const serverConfig = config.get('server');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { port }: any = config.get('server');
     const app = await NestFactory.create(AppModule);
-    const port = serverConfig.port;
 
     /**
      * log: 중요한 정보의 범용 로깅
